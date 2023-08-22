@@ -30,12 +30,12 @@ const personGenerator = {
             "id_2": "Максим",
             "id_3": "Иван",
             "id_4": "Артем",
-            "id_5": "Петр",
-            "id_6": "Денис",
+            "id_5": "Дмитрий",
+            "id_6": "Никита",
             "id_7": "Михаил",
             "id_8": "Даниил",
             "id_9": "Егор",
-            "id_10": "Глеб"
+            "id_10": "Андрей"
         }
     }`,
 
@@ -115,12 +115,26 @@ const personGenerator = {
     },
     
     randomPatronymic: function () {
-        if (this.person.gender =='Мужчина') {
-            return this.randomValue(this.firstNameMaleJson) + 'ович';
-        } else {
-            return this.randomValue(this.firstNameMaleJson) + 'овна';
+        p = this.randomValue (this.firstNameMaleJson);
+        if (this.person.gender == 'Мужчина') {
+            if (p[p.length-1] == 'а') {
+                return p.replace ('а','ич');
+                }
+                else if (p[p.length-1] == 'й') {
+                    return p.replace ('й','евич');
+                } else {
+                return p + 'ович';
+            }
+        } else if (p[p.length-1] == 'а') {
+            return p.replace ('а','ична');
         }
-    },
+        else if (p[p.length-1] == 'й') {
+            return p.replace ('й','евна');
+        } else {
+        return p + 'овна';
+        }
+
+},
 
     randomGender: function () {
         return Math.floor(Math.random()*2) == 1 ? this.GENDER_MALE : this.GENDER_FEMALE;
@@ -158,9 +172,9 @@ const personGenerator = {
     getPerson: function () {
         this.person = {};
         this.person.gender = this.randomGender();
+        this.person.patronymic = this.randomPatronymic()    
         this.person.surname = this.randomSurname();
         this.person.firstName = this.randomFirstName();
-        this.person.patronymic = this.randomPatronymic();
 
         if (monthRandom === 0) {
             this.person.month = this.randomMonth28();
